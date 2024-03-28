@@ -24,6 +24,21 @@ function total_loan_repaid()
   return $total_repaid;
 }
 
+function total_loan_repaid_per_loan($loan_id)
+{
+  // get settlements
+  $settlements = $GLOBALS['settlements'];
+  // filter $settlements by load_id
+  $settlements = array_filter($settlements, function ($settlement) use ($loan_id) {
+    return $settlement['loan_id'] == $loan_id;
+  });
+  $total_repaid = 0;
+  foreach ($settlements as $settlement) {
+    $total_repaid += $settlement['reconcile_amount'];
+  }
+  return $total_repaid;
+}
+
 function get_loan_interest_rate($repayment_plan)
 {
   return $repayment_plan == 6 ? 10 : 15;

@@ -77,6 +77,7 @@ function generateLoanTable($loan_status)
   echo '<th scope="col">Interest (%)</th>';
   echo '<th scope="col">Total to be repaid</th>';
   echo '<th scope="col">Total to be repaid monthly</th>';
+  echo '<th scope="col">Total amount repaid</th>';
   echo '<th scope="col">Loan Status</th>';
   echo '<th scope="col">Loan Date</th>';
   echo '<th scope="col">Actions</th>';
@@ -96,6 +97,7 @@ function generateLoanTable($loan_status)
     echo '<td>' . get_loan_interest_rate($loan['repayment_plan']) . '%</td>';
     echo '<td>' . comma_separate_amount(calculate_total_loan_repayment_amount($loan['loan_amount'], $loan['repayment_plan'])) . '</td>';
     echo '<td>' . comma_separate_amount(total_tobe_repaid_monthly($loan['loan_amount'], $loan['repayment_plan'])) . '</td>';
+    echo '<td>' . comma_separate_amount(total_loan_repaid_per_loan($loan['loan_id'])) . '</td>';
     echo '<td>' . generateLoanStatusBadge($loan['loan_status']) . '</td>';
     echo '<td>' . $loan['loan_date'] . '</td>';
     echo '<td>';
