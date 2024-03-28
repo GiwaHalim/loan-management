@@ -14,7 +14,7 @@ $link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
 
 // Check connection
 if ($link === false) {
-    die ("ERROR: Could not connect. " . mysqli_connect_error());
+    die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 
 $sql = "CREATE DATABASE IF NOT EXISTS DB_NAME";
@@ -32,8 +32,5 @@ if (mysqli_query($link, $sql)) {
 } else {
     // echo "Error selecting database: " . $link->error;
 }
-
-
-
 
 ?>

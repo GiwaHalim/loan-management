@@ -63,3 +63,21 @@ if (mysqli_num_rows($result) > 0) {
 } else {
   $GLOBALS['rejected_loans'] = array();
 }
+
+
+
+// get settlements
+$sql = "SELECT * FROM settle_reconcile_loan WHERE user_id = '$user_id' ORDER BY reconcile_id DESC";
+if (is_user_admin()) {
+  // If user is an admin, fetch all settlements and get the firstname and lastname of the user
+  $sql = "SELECT settle_reconcile_loan.*, user.firstname, user.lastname FROM settle_reconcile_loan JOIN user ON settle_reconcile_loan.user_id = user.user_id ORDER BY reconcile_id DESC";
+}
+$result = mysqli_query($link, $sql);
+if (mysqli_num_rows($result) > 0) {
+  $GLOBALS['settlements'] = array();
+  while ($row = mysqli_fetch_assoc($result)) {
+    $GLOBALS['settlements'][] = $row;
+  }
+} else {
+  $GLOBALS['settlements'] = array();
+}

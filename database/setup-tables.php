@@ -53,10 +53,11 @@ $create_settle_reconcile_loan_sql = "CREATE TABLE IF NOT EXISTS settle_reconcile
   reconcile_amount decimal(10,0) NOT NULL,
   user_id int NOT NULL,
   loan_id int NOT NULL,
-  total_paid_settlement decimal(10,0) NOT NULL,
-  unsettled_balance decimal(10,0) NOT NULL,
+  total_paid_settlement decimal(10,0),
+  unsettled_balance decimal(10,0),
   status varchar(200),
   payment_authorizer varchar(45),
+  payment_reference varchar(200),
   PRIMARY KEY (reconcile_id),
   KEY loan_id_idx (loan_id),
   CONSTRAINT loan_id FOREIGN KEY (loan_id) REFERENCES loan_request (loan_id)

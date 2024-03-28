@@ -24,10 +24,21 @@ function deleteLoan($loan_id)
 
 }
 
+function payLoan($loan_id, $amount, $email)
+{
+  // we call payWithPaystack js function here with the loan_id, amount and email
+  echo '<script>payWithPaystack(' . $loan_id . ', ' . $amount . ', "' . $email . '")</script>';
+}
+
 // Check if the form has been submitted (for delete action)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_loan_id'])) {
   // Call the delete function with the loan ID to delete
   deleteLoan($_POST['delete_loan_id']);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_loan_id'])) {
+  // Call the delete function with the loan ID to delete
+  payLoan($_POST['pay_loan_id'], $_POST['pay_loan_amount'], $_POST['pay_loan_email']);
 }
 
 
@@ -38,6 +49,18 @@ function generateDeleteForm($loan_id)
   echo '<input type="hidden" name="delete_loan_id" value="' . $loan_id . '">';
   echo '<button type="submit" class="btn btn-danger btn-sm">Delete</button>';
   echo '</form>';
+}
+
+// paystack payment
+function generatePayButton($loan_id, $total_monthly, $email)
+{
+  // log the prams
+  echo '<div method="POST" id="pay_form_' . $loan_id . '">';
+  echo '<input type="hidden" name="pay_loan_id" value="' . $loan_id . '">';
+  echo '<input type="hidden" name="pay_loan_amount" value="' . $total_monthly . '">';
+  echo '<input type="hidden" name="pay_loan_email" value="' . $email . '">';
+  echo '<button type="submit" class="checkout-btn btn btn-primary btn-sm"  onclick="payWithPaystack(' . $loan_id . ', ' . $total_monthly . ', \'' . $email . '\')">Pay</button>';
+  echo '</div>';
 }
 
 // Function to generate loan table
@@ -53,30 +76,38 @@ function generateLoanTable($loan_status)
   echo '<th scope="col">Repayment Plan</th>';
   echo '<th scope="col">Interest (%)</th>';
   echo '<th scope="col">Total to be repaid</th>';
+  echo '<th scope="col">Total to be repaid monthly</th>';
   echo '<th scope="col">Loan Status</th>';
   echo '<th scope="col">Loan Date</th>';
-  if ($loan_status == 'pending_loans') {
-    echo '<th scope="col">Actions</th>';
-  }
+  echo '<th scope="col">Actions</th>';
   echo '</tr>';
   echo '</thead>';
   echo '<tbody>';
 
   // Loop through each loan and display data in table rows
   foreach ($loans as $loan) {
+    $total_monthly = total_tobe_repaid_monthly($loan['loan_amount'], $loan['repayment_plan']);
+    $email = $GLOBALS['user']['email'];
+
     echo '<tr>';
     echo '<td>' . $loan['loan_id'] . '</td>';
     echo '<td>' . comma_separate_amount($loan['loan_amount']) . '</td>';
     echo '<td>' . $loan['repayment_plan'] . ' Months</td>';
     echo '<td>' . get_loan_interest_rate($loan['repayment_plan']) . '%</td>';
     echo '<td>' . comma_separate_amount(calculate_total_loan_repayment_amount($loan['loan_amount'], $loan['repayment_plan'])) . '</td>';
+    echo '<td>' . comma_separate_amount(total_tobe_repaid_monthly($loan['loan_amount'], $loan['repayment_plan'])) . '</td>';
     echo '<td>' . generateLoanStatusBadge($loan['loan_status']) . '</td>';
     echo '<td>' . $loan['loan_date'] . '</td>';
+    echo '<td>';
+    echo '<div class="d-flex gap-2">';
     if ($loan_status == 'pending_loans') {
-      echo '<td>';
       generateDeleteForm($loan['loan_id']);
-      echo '</td>';
     }
+    if ($loan_status == 'approved_loans') {
+      generatePayButton($loan['loan_id'], $total_monthly, $email);
+    }
+    echo '</div>';
+    echo '</td>';
     echo '</tr>';
   }
 
@@ -161,7 +192,7 @@ function generateLoanTable($loan_status)
     <div class="tab-content mt-2" id="myTabContent">
       <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
         <?php
-        if (isset($GLOBALS['pending_loans']) && !empty($GLOBALS['approved_loans'])) {
+        if (isset($GLOBALS['pending_loans']) && !empty($GLOBALS['pending_loans'])) {
           generateLoanTable('pending_loans');
         } else {
           echo '<p class="text-center">No pending loans found.</p>';
@@ -199,6 +230,10 @@ function generateLoanTable($loan_status)
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
     integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
     crossorigin="anonymous"></script>
+
+
+
+
 </body>
 
 </html>

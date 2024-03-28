@@ -7,6 +7,23 @@ function calculate_total_loan_repayment_amount($loan_amount, $repayment_plan)
   return $loan_amount + $interest;
 }
 
+function total_tobe_repaid_monthly($loan_amount, $repayment_plan)
+{
+  $repayment_plan = intval($repayment_plan);
+  return calculate_total_loan_repayment_amount($loan_amount, $repayment_plan) / $repayment_plan;
+}
+
+function total_loan_repaid()
+{
+  // get settlements
+  $settlements = $GLOBALS['settlements'];
+  $total_repaid = 0;
+  foreach ($settlements as $settlement) {
+    $total_repaid += $settlement['reconcile_amount'];
+  }
+  return $total_repaid;
+}
+
 function get_loan_interest_rate($repayment_plan)
 {
   return $repayment_plan == 6 ? 10 : 15;
