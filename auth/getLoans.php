@@ -1,9 +1,16 @@
 <?php
 
 require_once "getUser.php";
+require_once "../utils/utils.php";
 
 // SQL query to fetch pending loans
-$sql = "SELECT * FROM loan_request WHERE loan_status = 'PENDING' ORDER BY loan_id DESC";
+$user_id = $_SESSION["id"];
+
+$sql = "SELECT * FROM loan_request WHERE loan_status = 'PENDING' AND user_id = '$user_id' ORDER BY loan_id DESC";
+if (is_user_admin()) {
+  // If user is an admin, fetch all pending loans and get the firstname and lastname of the user
+  $sql = "SELECT loan_request.*, user.firstname, user.lastname FROM loan_request JOIN user ON loan_request.user_id = user.user_id WHERE loan_status = 'PENDING' ORDER BY loan_id DESC";
+}
 
 // Execute the query
 $result = mysqli_query($link, $sql);
@@ -23,7 +30,12 @@ if (mysqli_num_rows($result) > 0) {
 }
 
 // get approved_loans
-$sql = "SELECT * FROM loan_request WHERE loan_status = 'APPROVED' ORDER BY loan_id DESC";
+$sql = "SELECT * FROM loan_request WHERE loan_status = 'APPROVED' AND user_id = '$user_id' ORDER BY loan_id DESC";
+if (is_user_admin()) {
+  // If user is an admin, fetch all approved loans and get the firstname and lastname of the user
+  $sql = "SELECT loan_request.*, user.firstname, user.lastname FROM loan_request JOIN user ON loan_request.user_id = user.user_id WHERE loan_status = 'APPROVED' ORDER BY loan_id DESC";
+}
+
 $result = mysqli_query($link, $sql);
 if (mysqli_num_rows($result) > 0) {
   $GLOBALS['approved_loans'] = array();
@@ -36,7 +48,12 @@ if (mysqli_num_rows($result) > 0) {
 
 
 // get rejected_loans
-$sql = "SELECT * FROM loan_request WHERE loan_status = 'REJECTED' ORDER BY loan_id DESC";
+$sql = "SELECT * FROM loan_request WHERE loan_status = 'REJECTED' AND user_id = '$user_id' ORDER BY loan_id DESC";
+if (is_user_admin()) {
+  // If user is an admin, fetch all rejected loans and get the firstname and lastname of the user
+  $sql = "SELECT loan_request.*, user.firstname, user.lastname FROM loan_request JOIN user ON loan_request.user_id = user.user_id WHERE loan_status = 'REJECTED' ORDER BY loan_id DESC";
+}
+
 $result = mysqli_query($link, $sql);
 if (mysqli_num_rows($result) > 0) {
   $GLOBALS['rejected_loans'] = array();

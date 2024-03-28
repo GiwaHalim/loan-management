@@ -3,7 +3,7 @@
 session_start();
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if (isset ($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
   header("location: /pages/welcome.php");
   exit;
 }
@@ -19,23 +19,23 @@ $email_err = $password_err = $login_err = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Check if email is empty
-  if (empty (trim($_POST["email"]))) {
+  if (empty(trim($_POST["email"]))) {
     $email_err = "Please enter email.";
   } else {
     $email = trim($_POST["email"]);
   }
 
   // Check if password is empty
-  if (empty (trim($_POST["password"]))) {
+  if (empty(trim($_POST["password"]))) {
     $password_err = "Please enter your password.";
   } else {
     $password = trim($_POST["password"]);
   }
 
   // Validate credentials
-  if (empty ($email_err) && empty ($password_err)) {
+  if (empty($email_err) && empty($password_err)) {
     // Prepare a select statement
-    $sql = "SELECT user_id, email, password FROM user WHERE email = ?";
+    $sql = "SELECT user_id, email, password, user_type FROM user WHERE email = ?";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
       // Bind variables to the prepared statement as parameters
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if email exists, if yes then verify password
         if (mysqli_stmt_num_rows($stmt) == 1) {
           // Bind result variables
-          mysqli_stmt_bind_result($stmt, $user_id, $email, $hashed_password);
+          mysqli_stmt_bind_result($stmt, $user_id, $email, $hashed_password, $user_type);
           if (mysqli_stmt_fetch($stmt)) {
             if (password_verify($password, $hashed_password)) {
               // Password is correct, so start a new session
@@ -62,9 +62,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               $_SESSION["loggedin"] = true;
               $_SESSION["id"] = $user_id;
               $_SESSION["email"] = $email;
+              $_SESSION["is_admin"] = $user_type == 'ADMIN';
+
 
               // Redirect user to welcome page
-              header("location: /pages/welcome.php");
+              if ($user_type == 'ADMIN') {
+                header("location: /admin-pages/dashboard.php");
+              } else {
+                header("location: /pages/welcome.php");
+              }
             } else {
               // Password is not valid, display a generic error message
               $login_err = "Invalid email or password.";
@@ -114,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p>Please fill in your credentials to login.</p>
 
       <?php
-      if (!empty ($login_err)) {
+      if (!empty($login_err)) {
         echo '<div class="alert alert-danger">' . $login_err . '</div>';
       }
       ?>
@@ -122,8 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
           <div class="form-group">
             <label>Email</label>
-            <input type="text" name="email"
-              class="form-control <?php echo (!empty ($email_err)) ? 'is-invalid' : ''; ?>"
+            <input type="text" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>"
               value="<?php echo $email; ?>">
             <span class="invalid-feedback">
               <?php echo $email_err; ?>
@@ -132,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="form-group">
             <label>Password</label>
             <input type="password" name="password"
-              class="form-control <?php echo (!empty ($password_err)) ? 'is-invalid' : ''; ?>">
+              class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
             <span class="invalid-feedback">
               <?php echo $password_err; ?>
             </span>

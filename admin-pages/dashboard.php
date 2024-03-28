@@ -1,11 +1,7 @@
 <!-- include getUser.php once -->
 <?php require_once "../auth/getUser.php";
 require_once "../utils/utils.php";
-// if user is an admin redirect to admin page
-if (is_user_admin()) {
-  header("location: /admin-pages/dashboard.php");
-  exit;
-}
+
 ?>
 
 
@@ -25,7 +21,7 @@ if (is_user_admin()) {
 </head>
 
 <body>
-  <?php require_once "../components/nav.php"; ?>
+  <?php require_once "../components/admin/nav.php"; ?>
 
 
   <!-- <h1 class="my-5">Hi, <b>
@@ -38,7 +34,7 @@ if (is_user_admin()) {
 
   <div class="container">
 
-    <?php include "../components/dashboard.php"; ?>
+    <?php include "../components/admin/dashboard.php"; ?>
   </div>
 </body>
 

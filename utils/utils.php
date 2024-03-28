@@ -60,6 +60,22 @@ function getApprovedLoanAmount()
   return $approvedLoanAmount;
 }
 
+// calculate the total interest on all approved loans
+function totalExpectedProfit()
+{
+  // use calculate_total_loan_repayment_amount to calculate the total amount to be repaid for each loan
+  // then subtract the loan_amount to get the interest
+  $totalInterest = 0;
+  if (isset($GLOBALS['approved_loans'])) {
+    foreach ($GLOBALS['approved_loans'] as $loan) {
+      if (isset($loan['loan_amount'])) {
+        $totalInterest += calculate_total_loan_repayment_amount($loan['loan_amount'], $loan['repayment_plan']) - $loan['loan_amount'];
+      }
+    }
+  }
+  return $totalInterest;
+}
+
 function getRejectedLoanAmount()
 {
   // rejected loans (amount)
@@ -76,6 +92,25 @@ function getRejectedLoanAmount()
   return $rejectedLoanAmount;
 }
 
+
+function is_user_admin()
+{
+  return isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] === true;
+}
+
+
+function generateLoanStatusBadge($loan_status)
+{
+  $badge_class = "badge-primary";
+  if ($loan_status == "APPROVED") {
+    $badge_class = "badge-success";
+  } else if ($loan_status == "REJECTED") {
+    $badge_class = "badge-danger";
+  } else if ($loan_status == "PENDING") {
+    $badge_class = "badge-warning";
+  }
+  return "<span class='badge $badge_class'>$loan_status</span>";
+}
 
 function comma_separate_amount($amount)
 {

@@ -1,42 +1,74 @@
 <?php
 require_once "../auth/getLoans.php";
-
+require_once "../auth/getCustomersCount.php";
 
 // Function to delete a loan from the database
-function deleteLoan($loan_id)
+function approveLoan($loan_id)
 {
   // delete loan from the database
-  $sql = "DELETE FROM loan_request WHERE loan_id = $loan_id";
+  $sql = "UPDATE loan_request SET loan_status = 'APPROVED' WHERE loan_id = $loan_id";
   if (mysqli_query($GLOBALS['link'], $sql)) {
     // show success message for 2 seconds
-    echo '<div class="alert alert-success mt-1" role="alert">Loan deleted successfully</div>';
+    echo '<div class="alert alert-success mt-1" role="alert">Loan approved successfully</div>';
     // clear the output buffer after 2 seconds with setTimeout
-    echo '<script>setTimeout(function() {document.querySelector(".alert").remove();}, 2000);</script>';
-    // filter out the deleted loan from the pending loans
-    $GLOBALS['pending_loans'] = array_filter($GLOBALS['pending_loans'], function ($loan) use ($loan_id) {
-      return $loan['loan_id'] != $loan_id;
-    });
-    // Refresh the page to reflect the changes
-    // header("Refresh:0");
+    echo '<script>setTimeout(function() {document.querySelector(".alert").remove();}, 1000);</script>';
+    // get rid of the page state
+    echo '<script>setTimeout(function() {window.history.replaceState( null, null, window.location.href ); location.reload();}, 1000);</script>';
+
+    // add the approved loan to the approved loans
+    // $GLOBALS['approved_loans'][] = $GLOBALS['pending_loans'][array_search($loan_id, array_column($GLOBALS['pending_loans'], 'loan_id'))];
+
   } else {
     echo '<div class="alert alert-danger" role="alert">Error deleting loan: ' . mysqli_error($GLOBALS['link']) . '</div>';
   }
-
 }
 
-// Check if the form has been submitted (for delete action)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_loan_id'])) {
+
+function rejectLoan($loan_id)
+{
+  // delete loan from the database
+  $sql = "UPDATE loan_request SET loan_status = 'REJECTED' WHERE loan_id = $loan_id";
+  if (mysqli_query($GLOBALS['link'], $sql)) {
+    // show success message for 2 seconds
+    echo '<div class="alert alert-success mt-1" role="alert">Loan Rejected successfully</div>';
+    // clear the output buffer after 2 seconds with setTimeout
+    echo '<script>setTimeout(function() {document.querySelector(".alert").remove();}, 1000);</script>';
+    // get rid of the page state
+    echo '<script>setTimeout(function() {window.history.replaceState( null, null, window.location.href ); location.reload();}, 1000);</script>';
+
+  } else {
+    echo '<div class="alert alert-danger" role="alert">Error deleting loan: ' . mysqli_error($GLOBALS['link']) . '</div>';
+  }
+}
+
+// Check if the form has been submitted (for approve action)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['approve_loan_id'])) {
   // Call the delete function with the loan ID to delete
-  deleteLoan($_POST['delete_loan_id']);
+  approveLoan($_POST['approve_loan_id']);
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reject_loan_id'])) {
+  // Call the delete function with the loan ID to delete
+  rejectLoan($_POST['reject_loan_id']);
+}
+
+
 
 
 // Function to generate delete form for each loan
-function generateDeleteForm($loan_id)
+function generateApproveForm($loan_id)
 {
   echo '<form method="POST">';
-  echo '<input type="hidden" name="delete_loan_id" value="' . $loan_id . '">';
-  echo '<button type="submit" class="btn btn-danger btn-sm">Delete</button>';
+  echo '<input type="hidden" name="approve_loan_id" value="' . $loan_id . '">';
+  echo '<button type="submit" class="btn btn-success btn-sm">Approve</button>';
+  echo '</form>';
+}
+
+function generateRejectForm($loan_id)
+{
+  echo '<form method="POST">';
+  echo '<input type="hidden" name="reject_loan_id" value="' . $loan_id . '">';
+  echo '<button type="submit" class="btn btn-danger btn-sm">Reject</button>';
   echo '</form>';
 }
 
@@ -49,6 +81,7 @@ function generateLoanTable($loan_status)
   echo '<thead>';
   echo '<tr>';
   echo '<th scope="col">Loan ID</th>';
+  echo '<th scope="col">Customer</th>';
   echo '<th scope="col">Loan Amount</th>';
   echo '<th scope="col">Repayment Plan</th>';
   echo '<th scope="col">Interest (%)</th>';
@@ -66,6 +99,7 @@ function generateLoanTable($loan_status)
   foreach ($loans as $loan) {
     echo '<tr>';
     echo '<td>' . $loan['loan_id'] . '</td>';
+    echo '<td>' . $loan['firstname'] . ' ' . $loan['lastname'] . '</td>';
     echo '<td>' . comma_separate_amount($loan['loan_amount']) . '</td>';
     echo '<td>' . $loan['repayment_plan'] . ' Months</td>';
     echo '<td>' . get_loan_interest_rate($loan['repayment_plan']) . '%</td>';
@@ -74,7 +108,10 @@ function generateLoanTable($loan_status)
     echo '<td>' . $loan['loan_date'] . '</td>';
     if ($loan_status == 'pending_loans') {
       echo '<td>';
-      generateDeleteForm($loan['loan_id']);
+      echo '<div class="d-flex gap-3">';
+      generateApproveForm($loan['loan_id']);
+      generateRejectForm($loan['loan_id']);
+      echo '</div>';
       echo '</td>';
     }
     echo '</tr>';
@@ -112,29 +149,29 @@ function generateLoanTable($loan_status)
     <div class="container row mb-5">
       <div class="card col me-3">
         <div class="card-body">
-          <p class="card-title text-muted">Total Loan Amount</p>
+          <p class="card-title text-muted">Total Loan Paid</p>
           <h4 class="card-text display-6 font-weight-bold">
-            <?php echo comma_separate_amount(getTotalLoanAmount()) ?>
+            <?php echo comma_separate_amount(getApprovedLoanAmount()) ?>
           </h4>
-          <p class="card-text text-muted">This is the total of amount loan you've applied for.</p>
+          <p class="card-text text-muted">This is the total of amount loan paid(approved) to customers.</p>
         </div>
       </div>
       <div class="card col me-3">
         <div class="card-body">
-          <p class="card-title text-muted">Total Loan Collected</p>
+          <p class="card-title text-muted">Total Expected Profit</p>
           <h4 class="display-6 font-weight-bold">
-            <?php echo comma_separate_amount(getApprovedLoanAmount()) ?>
+            <?php echo comma_separate_amount(totalExpectedProfit()) ?>
           </h4>
-          <p class="card-text text-muted">This is the total amount of money approved by Company</p>
+          <p class="card-text text-muted">This is the total amount of money expected to be made from loan given out</p>
         </div>
       </div>
       <div class="card col">
         <div class="card-body">
-          <p class="card-title text-muted">Total Loan Rejected</p>
+          <p class="card-title text-muted">Total Number Of Customers</p>
           <h4 class="display-6 font-weight-bold">
-            <?php echo comma_separate_amount(getRejectedLoanAmount()) ?>
+            <?php echo isset($GLOBALS['customers_count']) ? $GLOBALS['customers_count'] : '' ?>
           </h4>
-          <p class="card-text text-muted">This is the total amount of money collected by the customer</p>
+          <p class="card-text text-muted">All customers that has created an account with our company. </p>
         </div>
       </div>
     </div>
@@ -145,7 +182,7 @@ function generateLoanTable($loan_status)
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button"
-          role="tab" aria-controls="home-tab-pane" aria-selected="true">Pending Loans</button>
+          role="tab" aria-controls="home-tab-pane" aria-selected="true">Pending Loans Requests</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button"
@@ -161,7 +198,7 @@ function generateLoanTable($loan_status)
     <div class="tab-content mt-2" id="myTabContent">
       <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
         <?php
-        if (isset($GLOBALS['pending_loans']) && !empty($GLOBALS['approved_loans'])) {
+        if (isset($GLOBALS['pending_loans']) && !empty($GLOBALS['pending_loans'])) {
           generateLoanTable('pending_loans');
         } else {
           echo '<p class="text-center">No pending loans found.</p>';
