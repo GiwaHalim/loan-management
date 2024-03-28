@@ -60,6 +60,8 @@ require_once "../auth/getLoans.php";
       echo '<th scope="col">Payment Gateway</th>';
       echo '<th scope="col">Payment Ref</th>';
       echo '<th scope="col">Loan ID</th>';
+      // user name
+      echo '<th scope="col">User Name</th>';
       echo '</tr>';
       echo '</thead>';
       echo '<tbody>';
@@ -74,6 +76,8 @@ require_once "../auth/getLoans.php";
         echo '<td>' . $settlement['payment_authorizer'] . '</td>';
         echo '<td>' . $settlement['payment_reference'] . '</td>';
         echo '<td>' . $settlement['loan_id'] . '</td>';
+        //firstname + lastname
+        echo '<td>' . $settlement['firstname'] . ' ' . $settlement['lastname'] . '</td>';
         echo '</tr>';
 
         echo '</tr>';

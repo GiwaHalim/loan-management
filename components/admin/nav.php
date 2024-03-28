@@ -40,6 +40,12 @@
           </li> -->
 
           <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/pages/loan-settlement.php">
+              <img src="../icons/settlement.png" /> Settlement
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/pages/logout.php">
               <img src="../icons/setting.png" /> Account
             </a>
