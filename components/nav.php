@@ -44,8 +44,15 @@
             </a>
           </li> -->
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/pages/account.php">
+            <a class="nav-link active" aria-current="page" href="/pages/logout.php">
               <img src="../icons/setting.png" /> Account
+            </a>
+          </li>
+          <!-- signout button -->
+          <li class="nav-item ml-1">
+            <!-- use red text -->
+            <a class="nav-link active text-danger font-weight-bold" aria-current="page" href="/auth/logout.php">
+              Sign out
             </a>
           </li>
         </ul>
