@@ -1,13 +1,19 @@
 <!-- include getUser.php once -->
-<?php require_once "../auth/getUser.php";
-require_once "../utils/utils.php"; ?>
+<?php
+// Include necessary files
+require_once "../auth/getUser.php";
+require_once "../utils/utils.php";
 
+// Include the navigation component
+include_once "../components/nav.php";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <title>Welcome</title>
+  <title>Loan Request</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
@@ -18,7 +24,6 @@ require_once "../utils/utils.php"; ?>
 </head>
 
 <body>
-  <?php require_once "../components/nav.php"; ?>
 
 
   <!-- <h1 class="my-5">Hi, <b>
@@ -31,7 +36,7 @@ require_once "../utils/utils.php"; ?>
 
   <div class="container">
 
-    <?php include "../components/dashboard.php"; ?>
+    <?php include "../components/loanRequest.php"; ?>
   </div>
 </body>
 

@@ -7,7 +7,7 @@ require_once "../utils/utils.php"; ?>
 
 <head>
   <meta charset="UTF-8">
-  <title>Welcome</title>
+  <title>Account</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
@@ -31,7 +31,7 @@ require_once "../utils/utils.php"; ?>
 
   <div class="container">
 
-    <?php include "../components/dashboard.php"; ?>
+    <?php include "../components/account.php"; ?>
   </div>
 </body>
 
