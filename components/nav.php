@@ -44,7 +44,7 @@
             </a>
           </li> -->
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/pages/logout.php">
+            <a class="nav-link active" aria-current="page" href="/pages/account.php">
               <img src="../icons/setting.png" /> Account
             </a>
           </li>

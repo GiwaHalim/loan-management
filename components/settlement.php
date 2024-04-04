@@ -32,7 +32,7 @@ require_once "../auth/getLoans.php";
           <p class="card-text text-muted">This is the total amount of money repaid to company.</p>
         </div>
       </div>
-      <div class="card col me-3">
+      <!-- <div class="card col me-3">
         <div class="card-body">
           <p class="card-title text-muted">Unsettled balance</p>
           <h4 class="card-text display-6 font-weight-bold">
@@ -40,7 +40,7 @@ require_once "../auth/getLoans.php";
           </h4>
           <p class="card-text text-muted">This is the total amount of money collected by the customer</p>
         </div>
-      </div>
+      </div> -->
     </div>
 
 

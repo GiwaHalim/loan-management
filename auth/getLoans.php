@@ -66,8 +66,8 @@ if (mysqli_num_rows($result) > 0) {
 
 
 
-// get settlements
-$sql = "SELECT * FROM settle_reconcile_loan WHERE user_id = '$user_id' ORDER BY reconcile_id DESC";
+// get settlements including the user_id firstname and lastname
+$sql = "SELECT settle_reconcile_loan.*, user.firstname, user.lastname FROM settle_reconcile_loan JOIN user ON settle_reconcile_loan.user_id = user.user_id WHERE settle_reconcile_loan.user_id = '$user_id' ORDER BY reconcile_id DESC";
 if (is_user_admin()) {
   // If user is an admin, fetch all settlements and get the firstname and lastname of the user
   $sql = "SELECT settle_reconcile_loan.*, user.firstname, user.lastname FROM settle_reconcile_loan JOIN user ON settle_reconcile_loan.user_id = user.user_id ORDER BY reconcile_id DESC";

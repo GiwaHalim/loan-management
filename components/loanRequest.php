@@ -135,13 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                     <div class="col col-sm-12 col-md-4 mb-5 d-flex justify-content-end">
-                        <div>
-                            <button class="btn btn-outlined-light rounded-5 border border-solid bg-light btn-sm">
-                                <div class="py-2 px-3">
-                                    <div>Cancel</div>
-                                </div>
-                            </button>
-                        </div>
+
                         <div class="ml-5">
                             <button class="btn rounded-5 border border-solid text-white bg-dark btn-sm">
                                 <div class="py-2 px-3">
