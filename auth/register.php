@@ -12,7 +12,7 @@ $submitting_form = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $submitting_form = true;
   // Validate email
-  if (empty (trim($_POST["email"]))) {
+  if (empty(trim($_POST["email"]))) {
     $email_err = "Please enter a email.";
   } elseif (!preg_match('/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/', trim($_POST["email"]))) {
     $email_err = "Please enter a valid email.";
@@ -47,14 +47,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   // validate first name
-  if (empty (trim($_POST["firstname"]))) {
+  if (empty(trim($_POST["firstname"]))) {
     $firstname_err = "Please enter a first name.";
   } else {
     $firstname = trim($_POST["firstname"]);
   }
 
   // validate last name
-  if (empty (trim($_POST["lastname"]))) {
+  if (empty(trim($_POST["lastname"]))) {
     $lastname_err = "Please enter a last name.";
   } else {
     $lastname = trim($_POST["lastname"]);
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
   // Validate password
-  if (empty (trim($_POST["password"]))) {
+  if (empty(trim($_POST["password"]))) {
     $password_err = "Please enter a password.";
   } elseif (strlen(trim($_POST["password"])) < 6) {
     $password_err = "Password must have atleast 6 characters.";
@@ -71,17 +71,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   // Validate confirm password
-  if (empty (trim($_POST["confirm_password"]))) {
+  if (empty(trim($_POST["confirm_password"]))) {
     $confirm_password_err = "Please confirm password.";
   } else {
     $confirm_password = trim($_POST["confirm_password"]);
-    if (empty ($password_err) && ($password != $confirm_password)) {
+    if (empty($password_err) && ($password != $confirm_password)) {
       $confirm_password_err = "Password did not match.";
     }
   }
 
   // Check input errors before inserting in database
-  if (empty ($email_err) && empty ($password_err) && empty ($confirm_password_err)) {
+  if (empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
 
     // Prepare an insert statement
     $sql = " INSERT INTO user (email, password, firstname, lastname) VALUES (?, ?, ?, ?)";
@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form-group">
         <label>First Name</label>
         <input type="text" name="firstname"
-          class="form-control <?php echo (!empty ($firstname_err)) ? 'is-invalid' : ''; ?>"
+          class="form-control <?php echo (!empty($firstname_err)) ? 'is-invalid' : ''; ?>"
           value="<?php echo $firstname; ?>">
         <span class="invalid-feedback">
           <?php echo $firstname_err; ?>
@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form-group">
         <label>Last Name</label>
         <input type="text" name="lastname"
-          class="form-control <?php echo (!empty ($lastname_err)) ? 'is-invalid' : ''; ?>"
+          class="form-control <?php echo (!empty($lastname_err)) ? 'is-invalid' : ''; ?>"
           value="<?php echo $lastname; ?>">
         <span class="invalid-feedback">
           <?php echo $lastname_err; ?>
@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
       <div class="form-group">
         <label>Email</label>
-        <input type="text" name="email" class="form-control <?php echo (!empty ($email_err)) ? 'is-invalid' : ''; ?>"
+        <input type="text" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>"
           value="<?php echo $email; ?>">
         <span class="invalid-feedback">
           <?php echo $email_err; ?>
@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form-group">
         <label>Password</label>
         <input type="password" name="password"
-          class="form-control <?php echo (!empty ($password_err)) ? 'is-invalid' : ''; ?>"
+          class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>"
           value="<?php echo $password; ?>">
         <span class="invalid-feedback">
           <?php echo $password_err; ?>
@@ -178,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form-group">
         <label>Confirm Password</label>
         <input type="password" name="confirm_password"
-          class="form-control <?php echo (!empty ($confirm_password_err)) ? 'is-invalid' : ''; ?>"
+          class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
           value="<?php echo $confirm_password; ?>">
         <span class="invalid-feedback">
           <?php echo $confirm_password_err; ?>
@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" class="btn btn-primary" value="Submit" l>
         <input type="reset" class="btn btn-secondary ml-2" value="Reset">
       </div>
-      <p>Already have an account? <a href="login.php">Login here</a>.</p>
+      <p>Already have an account? <a href="\loan-management/index.php">Login here</a>.</p>
     </form>
   </div>
 </body>

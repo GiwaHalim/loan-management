@@ -9,6 +9,5 @@ $_SESSION = array();
 session_destroy();
 
 // Redirect to login page
-header("location: /auth/login.php");
+header("location: \loan-management/index.php");
 exit;
-?>

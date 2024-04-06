@@ -14,7 +14,7 @@
 
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/pages/welcome.php">
+      <a class="navbar-brand" href="\loan-management/pages/welcome.php">
         <img src="../logo/Logo.png" />
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -24,17 +24,17 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item d-inline-block align-text-top">
-            <a class="nav-link active" aria-current="page" href="/pages/welcome.php">
+            <a class="nav-link active" aria-current="page" href="\loan-management/pages/welcome.php">
               <img src="../icons/dashboard.png" /> Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/pages/loan-request.php">
+            <a class="nav-link active" aria-current="page" href="\loan-management/pages/loan-request.php">
               <img src="../icons/requestLoan.png" /> Request loan
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/pages/loan-settlement.php">
+            <a class="nav-link active" aria-current="page" href="\loan-management/pages/loan-settlement.php">
               <img src="../icons/settlement.png" /> Settlement
             </a>
           </li>
@@ -44,14 +44,15 @@
             </a>
           </li> -->
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/pages/account.php">
+            <a class="nav-link active" aria-current="page" href="\loan-management/pages/account.php">
               <img src="../icons/setting.png" /> Account
             </a>
           </li>
           <!-- signout button -->
           <li class="nav-item ml-1">
             <!-- use red text -->
-            <a class="nav-link active text-danger font-weight-bold" aria-current="page" href="/auth/logout.php">
+            <a class="nav-link active text-danger font-weight-bold" aria-current="page"
+              href="\loan-management/auth/logout.php">
               Sign out
             </a>
           </li>

@@ -9,7 +9,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 }
 
 // Include config file
-require_once "../database/config.php";
+// require_once "../database/config.php";
 
 // Define variables and initialize with empty values
 $email = $password = "";
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               if ($user_type == 'ADMIN') {
                 header("location: /admin-pages/dashboard.php");
               } else {
-                header("location: /pages/welcome.php");
+                header("location: pages/welcome.php");
               }
             } else {
               // Password is not valid, display a generic error message
@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Login">
           </div>
-          <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
+          <p>Don't have an account? <a href="auth/register.php">Sign up now</a>.</p>
         </form>
       </div>
     </div>

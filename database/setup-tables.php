@@ -6,7 +6,7 @@ function create_table($sql)
 {
   global $link;
   if (mysqli_query($link, $sql)) {
-    echo "Table created successfully<br>";
+    // echo "Table created successfully<br>";
   } else {
     echo "Error creating table: " . $link->error;
   }
@@ -74,4 +74,3 @@ create_table($create_settle_reconcile_loan_sql);
 // delete_table("loan_request");
 // delete_table("user");
 
-?>
